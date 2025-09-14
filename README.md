@@ -310,6 +310,7 @@ npm run test:backend
 
 - [Backend API Documentation](./backend/README.md)
 - [Frontend Documentation](./frontend/README.md)
+- [CI/CD Pipeline Documentation](./docs/ci-cd-pipeline.md)
 - [Development Setup](./docs/development.md)
 - [Deployment Guide](./docs/deployment.md)
 
