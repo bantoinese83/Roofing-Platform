@@ -1,8 +1,31 @@
-# Roofing Platform
+# 🏠 Roof Platform
 
-Enterprise Roofing Contractor Scheduling & Management Platform
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Django](https://img.shields.io/badge/Django-4.2+-092e20.svg)](https://www.djangoproject.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-14+-000000.svg)](https://nextjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791.svg)](https://www.postgresql.org/)
 
-A comprehensive web and mobile application designed to empower roofing businesses by centralizing and streamlining their entire operational workflow. This platform eliminates inefficiencies in manual scheduling, dispatch, and job management processes.
+> **Enterprise Roofing Contractor Scheduling & Management Platform**
+
+A comprehensive SaaS solution designed to transform roofing business operations through intelligent scheduling, real-time job tracking, and seamless team coordination. Built for contractors who demand efficiency, reliability, and professional-grade management tools.
+
+## 📋 Table of Contents
+
+- [🏗️ Architecture](#-architecture)
+- [✨ Key Features](#-key-features)
+- [👥 User Roles](#-user-roles)
+- [🚀 Quick Start](#-quick-start)
+- [🔧 Configuration](#-configuration)
+- [🛠️ Development](#️-development)
+- [🧪 Testing](#-testing)
+- [🚀 Deployment](#-deployment)
+- [📚 Documentation](#-documentation)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🙏 Acknowledgments](#-acknowledgments)
+- [📞 Support](#-support)
 
 ## 🏗️ Architecture
 
@@ -27,29 +50,37 @@ A comprehensive web and mobile application designed to empower roofing businesse
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Python 3.11+
-- Node.js 18+
-- Docker & Docker Compose (optional, for containerized setup)
-- Git
+Get up and running with Roof Platform in minutes using our automated setup process.
 
-### Root-Level Setup (Recommended)
+### 📋 Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Python 3.11+** - Backend runtime environment
+- **Node.js 18+** - Frontend runtime environment
+- **Docker & Docker Compose** (optional) - For containerized development
+- **Git** - Version control system
+
+### ⚡ One-Command Setup (Recommended)
+
+For the fastest setup experience, use our automated script:
 
 ```bash
-# Clone and setup from project root
-git clone <repository-url>
+# Clone the repository
+git clone https://github.com/bantoinese83/Roofing-Platform.git
 cd roof-platform
 
-# Setup environment variables (generates .env file)
-./setup-env.sh
-# Review and edit .env with your actual credentials
+# Run automated setup (handles everything)
+./setup-env.sh && npm run setup
 
-# Setup both frontend and backend
-npm run setup
-
-# Start development servers (both frontend and backend)
+# Start development environment
 npm run dev
 ```
+
+**That's it!** 🎉 Your application will be running at:
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **Admin Panel**: http://localhost:8000/admin
 
 ### Environment Variables
 
@@ -110,21 +141,51 @@ docker-compose -f docker-compose.prod.yml up -d
 - **Admin Panel**: http://localhost:8000/admin
 - **API Documentation**: http://localhost:8000/docs/
 
-## 📋 Features
+## ✨ Key Features
 
-### Core Functionality
-- ✅ **Interactive Scheduling Dashboard** - Calendar-based job scheduling with drag-and-drop
-- ✅ **Job Management** - Comprehensive job tracking with customer details, materials, and status
-- ✅ **Technician & Crew Management** - Team profiles, skills, availability, and assignments
-- ✅ **Customer Relationship Management** - Customer profiles, service history, and communication logs
-- ✅ **Real-time Notifications** - SMS and email notifications for appointments and updates
+### 🔄 Core Business Operations
+- **🗓️ Interactive Scheduling Dashboard**
+  - Calendar-based job scheduling with drag-and-drop functionality
+  - Real-time conflict detection and resource allocation
+  - Multi-view calendar (day, week, month) with filtering options
 
-### Technical Features
-- ✅ **JWT Authentication** - Secure token-based authentication with role-based access
-- ✅ **Responsive Design** - Mobile-first design optimized for field technicians
-- ✅ **API-First Architecture** - RESTful APIs with comprehensive documentation
-- ✅ **Real-time Updates** - Live job tracking and status updates
-- ✅ **Offline Support** - Basic offline functionality for field operations
+- **📋 Job Management System**
+  - Comprehensive job tracking with customer details and project scope
+  - Material inventory tracking and job-specific notes
+  - Real-time status updates and progress monitoring
+  - Photo and document attachments for job documentation
+
+- **👷 Technician & Crew Management**
+  - Team profiles with skills, certifications, and availability tracking
+  - Crew grouping and dynamic assignment capabilities
+  - Time-off request management and scheduling optimization
+
+- **🏢 Customer Relationship Management**
+  - Customer profiles with complete service history
+  - Communication logs and interaction tracking
+  - Automated follow-ups and service reminders
+
+### 🔧 Technical Capabilities
+- **🔐 Enterprise-Grade Security**
+  - JWT authentication with role-based access control (RBAC)
+  - Multi-factor authentication (MFA) support
+  - Data encryption at rest and in transit
+
+- **📱 Modern User Experience**
+  - Responsive design optimized for desktop and mobile devices
+  - Progressive Web App (PWA) capabilities for field technicians
+  - Intuitive drag-and-drop interfaces and real-time updates
+
+- **⚡ High-Performance Architecture**
+  - RESTful API with comprehensive OpenAPI documentation
+  - Asynchronous task processing with Celery and Redis
+  - Optimized database queries and caching strategies
+
+- **🔗 Third-Party Integrations**
+  - Google Maps Platform for route optimization and geocoding
+  - Twilio integration for SMS notifications
+  - SendGrid for email communications
+  - Stripe payment processing (planned)
 
 ## 👥 User Roles
 
@@ -254,20 +315,152 @@ npm run test:backend
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+We welcome contributions from the community! Whether you're fixing bugs, adding features, improving documentation, or suggesting enhancements, your input is valuable.
 
-## 📄 License
+### 🚀 Getting Started
 
-This project is proprietary software. All rights reserved.
+1. **Fork the Repository**
+   - Click the "Fork" button on GitHub
+   - Clone your fork locally
 
-## 📞 Support
+2. **Set Up Development Environment**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/Roofing-Platform.git
+   cd roof-platform
+   ./setup-env.sh && npm run setup
+   npm run dev
+   ```
 
-For support or questions, please contact the development team.
+3. **Create a Feature Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/issue-number-description
+   ```
+
+### 📝 Development Guidelines
+
+#### Code Quality
+- Follow our [coding standards](./docs/development.md)
+- Write meaningful commit messages using [Conventional Commits](https://conventionalcommits.org/)
+- Add tests for new features and bug fixes
+- Ensure all tests pass before submitting
+
+#### Pull Request Process
+1. **Update Documentation**: Update relevant documentation for any new features
+2. **Test Thoroughly**: Ensure your changes work across all supported environments
+3. **Code Review**: Request review from maintainers
+4. **Merge**: Once approved, your PR will be merged
+
+#### Commit Message Format
+```
+type(scope): description
+
+[optional body]
+
+[optional footer]
+```
+
+**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+
+**Examples**:
+- `feat(scheduling): add drag-and-drop calendar functionality`
+- `fix(auth): resolve JWT token expiration issue`
+- `docs(readme): update installation instructions`
+
+### 🐛 Reporting Issues
+
+Found a bug? Have a feature request? Please [open an issue](https://github.com/bantoinese83/Roofing-Platform/issues) with:
+
+- Clear title and description
+- Steps to reproduce (for bugs)
+- Expected vs. actual behavior
+- Screenshots (if applicable)
+- Environment details (OS, browser, etc.)
+
+### 📋 Development Roadmap
+
+Check our [development roadmap](./docs/feature_roadmap.md) to see planned features and contribute to ongoing initiatives.
+
+### 🎯 Areas for Contribution
+
+- **Frontend Development**: React components, UI/UX improvements
+- **Backend Development**: API endpoints, database optimization
+- **Testing**: Unit tests, integration tests, E2E tests
+- **Documentation**: API docs, user guides, tutorials
+- **DevOps**: CI/CD improvements, deployment automation
+
+### 📞 Community
+
+- **Discussions**: Join our [GitHub Discussions](https://github.com/bantoinese83/Roofing-Platform/discussions) for questions and ideas
+- **Discord**: Connect with the community on our Discord server
+- **Newsletter**: Subscribe for updates and release announcements
+
+### 📄 Code of Conduct
+
+Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md) to ensure a welcoming environment for all contributors.
 
 ---
 
+**Thank you for contributing to Roof Platform!** 🙏
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+### 🛠️ Technology Stack
+- **Django** & **Django REST Framework** - Robust backend framework
+- **Next.js** & **React** - Modern frontend framework with App Router
+- **PostgreSQL** - Reliable database solution
+- **Redis** & **Celery** - Asynchronous task processing
+- **Tailwind CSS** & **Radix UI** - Beautiful, accessible UI components
+- **TanStack Query** - Powerful data fetching and caching
+
+### 📚 Third-Party Services
+Special thanks to our integration partners:
+- **Google Maps Platform** - Route optimization and mapping
+- **Twilio** - SMS communication services
+- **SendGrid** - Email delivery services
+- **Stripe** - Payment processing (planned)
+
+### 👥 Community Contributors
+We extend our gratitude to all contributors who have helped shape Roof Platform into what it is today.
+
+### 🎓 Inspiration
+Built with the needs of roofing contractors in mind, inspired by the challenges faced in traditional roofing business management.
+
+## 📞 Support
+
+### 🆘 Getting Help
+
+- **📖 Documentation**: Comprehensive guides in our [docs](./docs/) directory
+- **🐛 Bug Reports**: [GitHub Issues](https://github.com/bantoinese83/Roofing-Platform/issues)
+- **💬 Discussions**: [GitHub Discussions](https://github.com/bantoinese83/Roofing-Platform/discussions)
+- **📧 Email**: Contact the development team
+
+### 🔍 Troubleshooting
+
+Common issues and solutions:
+- **Environment Setup**: Run `./verify-env.sh` to check your configuration
+- **Database Issues**: Ensure PostgreSQL is running and credentials are correct
+- **Frontend Build Errors**: Clear node_modules and reinstall with `npm run reset`
+
+### 📊 System Requirements
+
+- **Minimum**: 4GB RAM, 2 CPU cores, 10GB storage
+- **Recommended**: 8GB RAM, 4 CPU cores, 20GB SSD storage
+- **Production**: 16GB+ RAM, 8+ CPU cores, dedicated database server
+
+---
+
+<div align="center">
+
+**🏠 Roof Platform** - *Transforming roofing business operations, one job at a time*
+
 **Built with ❤️ for roofing contractors everywhere**
+
+[🌟 Star us on GitHub](https://github.com/bantoinese83/Roofing-Platform) • [📖 Read the Docs](./docs/) • [🚀 Get Started](#-quick-start)
+
+</div>
