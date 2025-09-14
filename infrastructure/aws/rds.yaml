@@ -1,0 +1,157 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Roofing Platform RDS PostgreSQL Database'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: 'roofing-platform'
+    Description: 'Environment name for resource naming'
+
+  DBInstanceClass:
+    Type: String
+    Default: 'db.t3.micro'
+    AllowedValues:
+      - db.t3.micro
+      - db.t3.small
+      - db.t3.medium
+      - db.t3.large
+      - db.m5.large
+      - db.m5.xlarge
+    Description: 'RDS instance class'
+
+  DBAllocatedStorage:
+    Type: Number
+    Default: 20
+    MinValue: 20
+    MaxValue: 65536
+    Description: 'Allocated storage in GB'
+
+  DBName:
+    Type: String
+    Default: 'roof_platform'
+    Description: 'Database name'
+
+  DBUsername:
+    Type: String
+    Default: 'roof_admin'
+    Description: 'Database master username'
+
+  DBPassword:
+    Type: String
+    NoEcho: true
+    Description: 'Database master password'
+    MinLength: 8
+
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: 'VPC ID where RDS will be deployed'
+
+  PrivateSubnet1Id:
+    Type: String
+    Description: 'Private subnet 1 ID'
+
+  PrivateSubnet2Id:
+    Type: String
+    Description: 'Private subnet 2 ID'
+
+  RDSSecurityGroupId:
+    Type: String
+    Description: 'RDS security group ID'
+
+Resources:
+  # DB Subnet Group
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: !Sub '${EnvironmentName} database subnet group'
+      SubnetIds:
+        - !Ref PrivateSubnet1Id
+        - !Ref PrivateSubnet2Id
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-db-subnet-group'
+
+  # RDS PostgreSQL Instance
+  PostgreSQLDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: !Ref DBInstanceClass
+      AllocatedStorage: !Ref DBAllocatedStorage
+      Engine: postgres
+      EngineVersion: '15.4'
+      DBName: !Ref DBName
+      MasterUsername: !Ref DBUsername
+      MasterUserPassword: !Ref DBPassword
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      VPCSecurityGroups:
+        - !Ref RDSSecurityGroupId
+      MultiAZ: false  # Set to true for production
+      StorageType: gp3
+      BackupRetentionPeriod: 7
+      EnableCloudwatchLogsExports:
+        - postgresql
+      AutoMinorVersionUpgrade: true
+      DeletionProtection: false  # Set to true for production
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-postgresql'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # CloudWatch Alarms for RDS
+  DBCPUUtilizationAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${EnvironmentName}-rds-cpu-utilization'
+      AlarmDescription: 'RDS CPU utilization above 80%'
+      MetricName: CPUUtilization
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 80
+      ComparisonOperator: GreaterThanThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref PostgreSQLDB
+
+  DBFreeStorageSpaceAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${EnvironmentName}-rds-free-storage-space'
+      AlarmDescription: 'RDS free storage space below 2GB'
+      MetricName: FreeStorageSpace
+      Namespace: AWS/RDS
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 2
+      Threshold: 2147483648  # 2GB in bytes
+      ComparisonOperator: LessThanThreshold
+      Dimensions:
+        - Name: DBInstanceIdentifier
+          Value: !Ref PostgreSQLDB
+
+Outputs:
+  DBEndpoint:
+    Description: 'RDS PostgreSQL endpoint'
+    Value: !GetAtt PostgreSQLDB.Endpoint.Address
+    Export:
+      Name: !Sub '${EnvironmentName}-db-endpoint'
+
+  DBPort:
+    Description: 'RDS PostgreSQL port'
+    Value: !GetAtt PostgreSQLDB.Endpoint.Port
+    Export:
+      Name: !Sub '${EnvironmentName}-db-port'
+
+  DBDatabaseName:
+    Description: 'Database name'
+    Value: !Ref DBName
+    Export:
+      Name: !Sub '${EnvironmentName}-db-name'
+
+  DBUsername:
+    Description: 'Database username'
+    Value: !Ref DBUsername
+    Export:
+      Name: !Sub '${EnvironmentName}-db-username'

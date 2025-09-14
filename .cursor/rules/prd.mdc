@@ -1,0 +1,274 @@
+---
+description:prd
+
+globs:
+alwaysApply: true
+---
+Enterprise Roofing Contractor Scheduling &
+Management Platform
+1. Introduction
+Summary
+The Enterprise Roofing Contractor Scheduling & Management Platform is a robust web and mobile
+application designed to empower roofing businesses by centralizing and streamlining their entire
+operational workflow. It aims to eliminate inefficiencies inherent in manual scheduling, dispatch, and job
+management processes, ultimately boosting productivity, optimizing resource utilization, enhancing
+communication, and improving customer satisfaction for roofing contractors of all sizes.
+Problem Statement
+Roofing contractors frequently struggle with inefficient manual scheduling, leading to conflicts, missed
+appointments, and suboptimal resource allocation. Lack of real-time visibility into field operations hinders
+effective decision-making and crew coordination. Disjointed communication channels between office
+staff, field technicians, and customers result in errors, delays, and dissatisfied clients. Furthermore, the
+absence of centralized data makes reporting, historical tracking, and business analysis challenging.
+Solution
+This platform provides a comprehensive solution by offering an intuitive, interactive scheduling
+dashboard, real-time job tracking, integrated communication tools, and a centralized database for
+customer, technician, and job information. It automates critical administrative tasks, optimizes route
+planning, facilitates seamless information flow, and provides actionable insights, transforming the way
+roofing contractors manage their daily operations and client interactions.
+Target Audience
+The primary target audience includes roofing business owners and managers seeking to enhance
+operational efficiency and profitability, office administrators responsible for scheduling and dispatch, and
+field technicians requiring clear job instructions and streamlined on-site communication.
+2. User Personas
+Sarah, Owner-Operator - Oversees all business operations, sales, and financial performan
+Goals
+• Increase overall job completion rates and profitability.
+• Optimize resource allocation to reduce idle time and overtime costs.
+• Improve customer satisfaction and retention through better service delivery.
+• Gain clear visibility into all ongoing operations and team performance.
+• Streamline administrative tasks to focus on business growth.
+Frustrations
+• Frequent scheduling conflicts and last-minute changes.
+• Lack of real-time insights into job progress and technician locations.
+• Inefficient communication between office and field crews.
+• Manual data entry and error-prone reporting.
+• Difficulty tracking overall business performance and identifying bottlenecks.
+Mike, Lead Roofer - Manages on-site crews, executes roofing projects, and interacts with
+Goals
+• Receive clear and detailed job instructions on his mobile device.
+• Follow efficient routes to job sites.
+• Access all necessary job materials, photos, and notes easily.
+• Communicate effectively with the office and customers from the field.
+• Complete jobs on time and to a high standard.
+Frustrations
+• Confusing or frequently changing schedules.
+• Missing critical job information (e.g., materials, special instructions).
+• Inefficient travel time due to poor route planning.
+• Difficulty documenting on-site progress or issues (e.g., photos).
+• Manual paperwork after each job prolonging his day.
+Emily, Office Manager - Handles all scheduling, customer inquiries, dispatch, and adminis
+Goals
+• Efficiently schedule and dispatch jobs without conflicts.
+• Maintain accurate and centralized customer and job records.
+• Communicate seamlessly with field technicians and customers.
+• Reduce the time spent on manual scheduling and follow-ups.
+• Provide quick and accurate information to customers and team members.
+Frustrations
+• Manual scheduling leading to errors and oversights.
+• Difficulty coordinating with multiple field crews and their availability.
+• Managing numerous phone calls and emails for schedule changes.
+• Lack of a single source of truth for all job-related information.
+• Time-consuming process for generating daily schedules and reports.
+3. Features
+Interactive Scheduling Dashboard
+A centralized, intuitive calendar-based dashboard providing a comprehensive overview of all scheduled
+jobs, technician availability, and resource allocation. It supports drag-and-drop functionality for easy
+rescheduling and real-time conflict detection.
+User Stories
+• As an office administrator, I want to see all scheduled jobs and available technicians on a dynamic
+calendar view, so I can easily assign, reschedule, and manage appointments.
+• As a business owner, I want to quickly identify and resolve potential scheduling conflicts (e.g.,
+overlapping jobs, technician unavailability), so I can maintain operational efficiency.
+• As an office administrator, I want to filter the schedule by technician, job status, and location, so I
+can focus on specific operational segments.
+Acceptance Criteria
+• Users can view schedules by day, week, month, and custom date ranges.
+• Jobs and technicians can be assigned and rescheduled via drag-and-drop functionality.
+• The system will visually highlight and notify users of any scheduling conflicts or overlaps.
+• Filters for technician, job status, and location will be available and functional.
+• The dashboard will load within 2 seconds for a typical workload (e.g., 50 jobs, 20 technicians).
+Job Management & Details
+A comprehensive module for creating, viewing, and updating detailed job records. Each job record
+includes customer information, project scope, materials required, job-specific notes, attachments (photos,
+documents), and real-time status updates.
+User Stories
+• As a field technician, I want to access all job-related details, including customer info, specific
+instructions, and necessary materials, on my mobile device, so I have all the information required
+on-site.
+• As an office administrator, I want to create and update job records efficiently, including attaching
+photos and documents, so all information is centralized and accurate.
+• As a business owner, I want to track the real-time status of each job, so I can monitor progress and
+communicate effectively with customers.
+Acceptance Criteria
+• Ability to create, edit, and view job details including customer, address, job type, detailed scope,
+required materials, internal notes, and public notes.
+• Support for uploading and viewing multiple photos and documents per job.
+• Real-time job status tracking (e.g., 'New', 'Scheduled', 'Dispatched', 'In Progress', 'Completed',
+'Canceled').
+• Field technicians can update job status and add on-site notes and photos directly from their mobile
+device.
+• Historical log of all changes made to a job record will be maintained.
+Technician & Crew Management
+Functionality to manage individual technician profiles, including contact information, skill sets, availability,
+and assigned roles. It enables grouping technicians into crews and assigning them to jobs.
+User Stories
+• As a business owner, I want to manage my team's profiles, skills, and certifications, so I can assign
+the right crew to the right job based on requirements.
+• As an office administrator, I want to easily check technician availability and manage their time-off
+requests, so I can schedule jobs without conflicts.
+• As a field technician, I want to view my assigned schedule and job details conveniently, so I know
+where and when I need to be.
+Acceptance Criteria
+• Ability to create, edit, and deactivate technician profiles (name, contact, skills, certifications, roles).
+• System will allow for setting technician availability (working hours, days off, vacations).
+• Option to group technicians into crews for efficient assignment to larger jobs.
+• Technicians can view their personal schedule and job assignments through their respective
+portals/app.
+• Role-based access control will ensure technicians only see their relevant information.
+Customer Relationship Management (CRM) Lite
+A basic CRM module focused on managing customer profiles, storing contact details, service history, and
+communication logs. It provides a centralized view of all interactions and jobs associated with each
+customer.
+User Stories
+• As an office administrator, I want to access a customer's complete history, including past jobs and
+contact details, so I can provide personalized and informed service.
+• As a business owner, I want to track key customer interactions and preferences, so I can improve
+customer retention and targeted follow-ups.
+• As an office administrator, I want to quickly add new customer details when a new inquiry comes in,
+so I can create job records efficiently.
+Acceptance Criteria
+• Ability to create and edit customer profiles including name, contact information (phone, email),
+multiple addresses, and general notes.
+• All jobs associated with a specific customer will be linked and easily accessible from their profile.
+• A basic communication log will track automated notifications sent to the customer.
+• Search functionality for customer profiles based on name, phone, or address.
+• Data validation for key customer information (e.g., email format, phone number format).
+Real-time Notifications
+An automated notification system that sends timely SMS and email alerts to customers regarding
+appointment confirmations, reminders, and status updates, as well as internal notifications to technicians
+for new assignments or schedule changes.
+User Stories
+• As a customer, I want to receive automated reminders about my upcoming roofing appointment, so I
+don't forget and can prepare accordingly.
+• As a field technician, I want to be notified instantly of any new job assignments or schedule changes,
+so I stay updated and can adjust my plans.
+• As an office administrator, I want to configure the types and timing of automated notifications, so I
+can tailor communication to our business needs.
+• As an office administrator, I want to see a record of all notifications sent to a customer, so I can track
+communication history.
+Acceptance Criteria
+• Automated SMS and email notifications will be sent for appointment confirmation, reminders (e.g., 24
+hours prior), and status changes (e.g., 'Technician On The Way').
+• Configurable templates for all notification types, allowing for customization of message content.
+• Internal notifications (push and/or email) for technicians on new job assignments, schedule changes,
+and critical updates.
+• A log of all sent notifications will be accessible from the respective job and customer profiles.
+• Integration with a reliable third-party SMS/email provider.
+4. Technical Requirements
+Frontend: Next.js, React, TypeScript, Tailwind CSS, React Query
+Backend: Django, Python, Django REST Framework, Celery (for asynchronous tasks)
+Database: PostgreSQL
+Key APIs: Google Maps Platform (for geocoding, routing, and mapping), Twilio (for SMS notifications),
+SendGrid (for email notifications), Stripe (for future payment processing integration)
+Hosting Environment: AWS (EC2 for compute, RDS for database, S3 for media storage, Route 53 for
+DNS, CloudFront for CDN)
+5. Key Performance Indicators (KPIs)
+Job Completion Rate
+Description: The percentage of scheduled jobs that are successfully completed within the platform.
+Target: >95%
+Technician Utilization Rate
+Description: The average percentage of time technicians are actively assigned to and working on
+scheduled jobs, optimizing labor efficiency.
+Target: >75%
+Customer No-Show/Cancellation Rate
+Description: The percentage of scheduled jobs that are either canceled by the customer or result in a
+no-show.
+Target: <5% (to be reduced by effective reminders)
+Average Time to Schedule a Job
+Description: The average time taken from a new customer inquiry or job request to the job being officially
+scheduled in the system.
+Target: <5 minutes
+Daily Active Users (DAU)
+Description: The number of unique users (technicians, office staff, managers) actively logging into and
+interacting with the platform daily.
+Target: Consistent growth aligned with user base expansion and adoption.
+6. Release Plan
+MVP (Minimum Viable Product)
+Focus on core scheduling, job management, basic technician and customer profiles, and essential
+notifications to validate the primary value proposition.
+Features Included
+• Interactive Scheduling Dashboard
+• Job Management & Details
+• Technician & Crew Management (basic profiles & assignments)
+• Customer Relationship Management (CRM) Lite (basic profiles)
+• Real-time Notifications (essential appointment confirmations & reminders)
+Version 1.1 - Efficiency & Communication Enhancements
+Improve existing features based on initial user feedback, enhance communication channels, and
+introduce basic reporting capabilities.
+Features Included
+• Enhanced Notification System (more configurable, detailed logs)
+• Basic Reporting & Analytics (job status, technician performance, completion rates)
+• Improved UI/UX for Scheduling Dashboard (drag-and-drop refinements, more filters)
+• Internal Chat/Notes on Jobs (for office-field communication)
+• Technician Availability Management (time-off requests)
+Version 1.2 - Advanced Functionality & Integrations
+Introduce advanced features such as route optimization, payment processing, and more comprehensive
+reporting to further streamline operations and increase revenue potential.
+Features Included
+• Route Optimization (integration with Google Maps for efficient travel)
+• In-app Payment Processing (via Stripe integration)
+• Quote/Estimate Generation and Management
+• Basic Inventory Management (tracking materials per job)
+• Advanced Reporting & Dashboards (customizable reports, financial overviews)
+7. Non-Goals / Out of Scope
+• Full-fledged accounting system integration (beyond basic payment processing and invoice
+generation).
+• Complex, warehouse-level inventory management (focus is on job-specific material tracking).
+• Direct marketing campaign management or customer segmentation tools.
+• Comprehensive time tracking for payroll purposes (will provide data, but not process payroll).
+• Native mobile applications (MVP will be a responsive web app, dedicated apps may be considered in
+future phases).
+8. Design & UX Requirements
+UX Principles
+• Simplicity: Intuitive interface for easy adoption by all user roles.
+• Efficiency: Streamlined workflows to minimize clicks and time spent on tasks.
+• Consistency: Uniform design language and interaction patterns across the platform.
+• Mobile-First: Optimized experience for field technicians accessing the platform on mobile devices.
+• Feedback: Clear and immediate feedback for user actions and system status.
+• Accessibility: Designed to be usable by individuals with diverse abilities.
+Accessibility
+WCAG 2.1 AA compliance for all public-facing and core internal interfaces.
+9. Security Requirements
+Authentication: Robust authentication using industry-standard protocols (e.g., JWT for API
+authentication). Multi-factor authentication (MFA) support for all user roles. Role-based access control
+(RBAC) to ensure users only access authorized data and functionalities. Strong password policies.
+Data Encryption: All data at rest will be encrypted using AES-256. All data in transit will be encrypted
+using TLS 1.3 or higher. Passwords will be stored using strong, salted hashing algorithms (e.g., bcrypt).
+Compliance: GDPR (for any user data from EU citizens, if applicable)., CCPA (for any user data from
+California residents, if applicable)., Regular security audits and penetration testing. Industry best
+practices for data privacy and security.
+10. Performance & Scalability Requirements
+Page Load Time: Key dashboards (Scheduling, Job List, Customer List) should load within 2 seconds on
+a standard 4G connection. Detail pages (Job Details, Customer Profile) should load within 1.5 seconds.
+API Response Time: P95 latency for critical APIs (e.g., scheduling updates, job lookups, technician
+availability checks) should be less than 200ms. All other APIs should target less than 500ms P95.
+Concurrent Users: The system must support at least 500 concurrent active users without any noticeable
+degradation in performance. The architecture should be designed for scalability to support 2000+
+concurrent users with appropriate infrastructure scaling.
+11. Assumptions
+• Roofing contractors are willing to invest in and adopt a digital platform for their operations.
+• Users (both office and field) have access to reliable internet connectivity and modern mobile devices
+(for field use).
+• Accurate and up-to-date geographic data will be available from third-party map providers for routing
+and location services.
+• Third-party API providers (Google Maps, Twilio, SendGrid) will maintain their service levels and API
+contracts.
+• The development team has expertise in Next.js, Django, and cloud infrastructure (AWS).
+• User training and onboarding will be provided to ensure smooth adoption of the platform.
+12. Dependencies
+• Google Maps Platform (API access, billing enabled).
+• Twilio API access and account for SMS notifications.
+• SendGrid API access and account for email notifications.
+• AWS cloud infrastructure (accounts, permissions, and initial setup).
+• UI/UX design team for providing high-fidelity mockups, prototypes, and a design system.
+• Internal IT/DevOps team for infrastructure management, monitoring, and deployment support.

@@ -1,0 +1,190 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Roofing Platform S3 and CloudFront Configuration'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: 'roofing-platform'
+    Description: 'Environment name for resource naming'
+
+  DomainName:
+    Type: String
+    Description: 'Domain name for the application (e.g., roofingplatform.com)'
+
+Resources:
+  # S3 Bucket for Static Assets
+  StaticAssetsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${EnvironmentName}-static-assets-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-static-assets'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # S3 Bucket for Media Files
+  MediaFilesBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${EnvironmentName}-media-files-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, PUT, POST]
+            AllowedOrigins: ['*']
+            MaxAge: 3000
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-media-files'
+        - Key: Environment
+          Value: !Ref EnvironmentName
+
+  # CloudFront Origin Access Identity
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::OriginAccessIdentity
+    Properties:
+      OriginAccessIdentityConfig:
+        Comment: !Sub 'OAI for ${EnvironmentName}'
+
+  # CloudFront Distribution
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Sub '${EnvironmentName} CloudFront Distribution'
+        DefaultCacheBehavior:
+          TargetOriginId: !Sub '${EnvironmentName}-static-origin'
+          ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          CachePolicyId: '4135ea2d-6df8-44a3-9df3-4b5a84be39ad'  # CachingEnabled
+        Origins:
+          - DomainName: !GetAtt StaticAssetsBucket.RegionalDomainName
+            Id: !Sub '${EnvironmentName}-static-origin'
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+        Enabled: true
+        HttpVersion: http2
+        PriceClass: PriceClass_100  # Use only US, Canada, Europe
+        Aliases:
+          - !Sub 'cdn.${DomainName}'
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CloudFrontCertificate
+          SslSupportMethod: sni-only
+        WebACLId: !Ref CloudFrontWAF
+
+  # CloudFront Certificate (placeholder - needs to be created separately)
+  CloudFrontCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Sub 'cdn.${DomainName}'
+      ValidationMethod: DNS
+      SubjectAlternativeNames:
+        - !Sub '*.cdn.${DomainName}'
+
+  # CloudFront WAF Web ACL
+  CloudFrontWAF:
+    Type: AWS::WAFv2::WebACL
+    Properties:
+      Name: !Sub '${EnvironmentName}-cloudfront-waf'
+      Scope: CLOUDFRONT
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: !Sub '${EnvironmentName}-cloudfront-waf'
+
+  # S3 Bucket Policy for CloudFront Access
+  StaticAssetsBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref StaticAssetsBucket
+      PolicyDocument:
+        Statement:
+          - Sid: AllowCloudFrontAccess
+            Effect: Allow
+            Principal:
+              AWS: !Sub 'arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CloudFrontOriginAccessIdentity}'
+            Action: 's3:GetObject'
+            Resource: !Sub '${StaticAssetsBucket}/*'
+
+  # Lifecycle Configuration for Static Assets
+  StaticAssetsLifecycleConfiguration:
+    Type: AWS::S3::BucketLifecycleConfiguration
+    Properties:
+      Bucket: !Ref StaticAssetsBucket
+      Rules:
+        - Id: DeleteOldVersions
+          Status: Enabled
+          NoncurrentVersionExpirationInDays: 30
+        - Id: MoveToIA
+          Status: Enabled
+          Transitions:
+            - Days: 90
+              StorageClass: STANDARD_IA
+        - Id: MoveToGlacier
+          Status: Enabled
+          Transitions:
+            - Days: 365
+              StorageClass: GLACIER
+
+  # Lifecycle Configuration for Media Files
+  MediaFilesLifecycleConfiguration:
+    Type: AWS::S3::BucketLifecycleConfiguration
+    Properties:
+      Bucket: !Ref MediaFilesBucket
+      Rules:
+        - Id: MoveToIA
+          Status: Enabled
+          Transitions:
+            - Days: 30
+              StorageClass: STANDARD_IA
+        - Id: MoveToGlacier
+          Status: Enabled
+          Transitions:
+            - Days: 180
+              StorageClass: GLACIER
+
+Outputs:
+  StaticAssetsBucketName:
+    Description: 'S3 bucket name for static assets'
+    Value: !Ref StaticAssetsBucket
+    Export:
+      Name: !Sub '${EnvironmentName}-static-bucket'
+
+  MediaFilesBucketName:
+    Description: 'S3 bucket name for media files'
+    Value: !Ref MediaFilesBucket
+    Export:
+      Name: !Sub '${EnvironmentName}-media-bucket'
+
+  CloudFrontDistributionId:
+    Description: 'CloudFront Distribution ID'
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: !Sub '${EnvironmentName}-cloudfront-id'
+
+  CloudFrontURL:
+    Description: 'CloudFront Distribution URL'
+    Value: !Sub 'https://${CloudFrontDistribution.DomainName}'
+    Export:
+      Name: !Sub '${EnvironmentName}-cloudfront-url'

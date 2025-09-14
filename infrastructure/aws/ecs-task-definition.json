@@ -1,0 +1,92 @@
+{
+  "family": "roofing-platform-backend",
+  "taskRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com/roofing-platform-backend:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "DEBUG",
+          "value": "False"
+        },
+        {
+          "name": "SECRET_KEY",
+          "value": "CHANGE_THIS_IN_PRODUCTION"
+        },
+        {
+          "name": "DB_NAME",
+          "value": "roof_platform"
+        },
+        {
+          "name": "DB_USER",
+          "value": "admin"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": "CHANGE_THIS_PASSWORD"
+        },
+        {
+          "name": "DB_HOST",
+          "value": "CHANGE_THIS_DB_HOST"
+        },
+        {
+          "name": "DB_PORT",
+          "value": "5432"
+        },
+        {
+          "name": "REDIS_URL",
+          "value": "redis://CHANGE_THIS_REDIS_HOST:6379/0"
+        },
+        {
+          "name": "CELERY_BROKER_URL",
+          "value": "redis://CHANGE_THIS_REDIS_HOST:6379/0"
+        },
+        {
+          "name": "CELERY_RESULT_BACKEND",
+          "value": "redis://CHANGE_THIS_REDIS_HOST:6379/0"
+        },
+        {
+          "name": "ALLOWED_HOSTS",
+          "value": ".roofingplatform.com"
+        },
+        {
+          "name": "CORS_ALLOWED_ORIGINS",
+          "value": "https://roofingplatform.com"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/roofing-platform-backend",
+          "awslogs-region": "REGION",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/health/ || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}

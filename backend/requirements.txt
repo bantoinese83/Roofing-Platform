@@ -1,0 +1,40 @@
+Django==4.2.24
+djangorestframework==3.15.2
+djangorestframework-simplejwt==5.3.1
+celery==5.5.3
+django-celery-beat==2.8.1
+psycopg2-binary==2.9.10
+python-decouple==3.8
+python-dotenv==1.0.1
+django-cors-headers==4.4.0
+redis==6.1.1
+requests==2.32.3
+
+# Authentication & MFA
+django-allauth==0.63.3
+django-allauth[mfa]==0.63.3
+
+# Communications
+twilio==9.3.3
+sendgrid==6.11.0
+
+# File handling
+Pillow==10.4.0
+
+# AWS services
+boto3==1.35.29
+django-storages==1.14.4
+
+# Payment processing
+stripe==10.12.0
+
+# Additional utilities
+django-filter==24.3
+djangorestframework-simplejwt[token_blacklist]==5.3.1
+
+# Production server
+gunicorn==23.0.0
+
+# Development and testing
+django-extensions==3.2.3
+drf-yasg==1.21.7  # API documentation (optional)

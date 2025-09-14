@@ -1,0 +1,133 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Roofing Platform Route 53 DNS Configuration'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: 'roofing-platform'
+    Description: 'Environment name for resource naming'
+
+  DomainName:
+    Type: String
+    Description: 'Domain name for the application (e.g., roofingplatform.com)'
+
+  LoadBalancerDNS:
+    Type: String
+    Description: 'ALB DNS name'
+
+  CloudFrontDomain:
+    Type: String
+    Description: 'CloudFront distribution domain name'
+
+Resources:
+  # Hosted Zone (if domain is not already registered)
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref DomainName
+      HostedZoneConfig:
+        Comment: !Sub 'Hosted zone for ${EnvironmentName}'
+
+  # SSL Certificate for ALB
+  ALBCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      ValidationMethod: DNS
+      SubjectAlternativeNames:
+        - !Sub '*.${DomainName}'
+
+  # Route 53 Record for ALB (main domain)
+  ALBRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget:
+        DNSName: !Ref LoadBalancerDNS
+        HostedZoneId: !GetAtt LoadBalancerDNS.HostedZoneId
+        EvaluateTargetHealth: true
+
+  # Route 53 Record for API subdomain
+  APIRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Sub 'api.${DomainName}'
+      Type: A
+      AliasTarget:
+        DNSName: !Ref LoadBalancerDNS
+        HostedZoneId: !GetAtt LoadBalancerDNS.HostedZoneId
+        EvaluateTargetHealth: true
+
+  # Route 53 Record for CloudFront (CDN subdomain)
+  CDNRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Sub 'cdn.${DomainName}'
+      Type: A
+      AliasTarget:
+        DNSName: !Ref CloudFrontDomain
+        HostedZoneId: Z2FDTNDATAQYW2  # CloudFront hosted zone ID
+        EvaluateTargetHealth: false
+
+  # Health Check for ALB
+  ALBHealthCheck:
+    Type: AWS::Route53::HealthCheck
+    Properties:
+      HealthCheckConfig:
+        Type: HTTP
+        ResourcePath: '/health/'
+        FullyQualifiedDomainName: !Ref DomainName
+        Port: 80
+        RequestInterval: 30
+        FailureThreshold: 3
+        MeasureLatency: true
+        Regions:
+          - us-east-1
+          - us-west-1
+          - eu-west-1
+
+  # Health Check for API
+  APIHealthCheck:
+    Type: AWS::Route53::HealthCheck
+    Properties:
+      HealthCheckConfig:
+        Type: HTTP
+        ResourcePath: '/api/health/'
+        FullyQualifiedDomainName: !Sub 'api.${DomainName}'
+        Port: 80
+        RequestInterval: 30
+        FailureThreshold: 3
+        MeasureLatency: true
+        Regions:
+          - us-east-1
+          - us-west-1
+          - eu-west-1
+
+Outputs:
+  HostedZoneId:
+    Description: 'Route 53 Hosted Zone ID'
+    Value: !Ref HostedZone
+    Export:
+      Name: !Sub '${EnvironmentName}-hosted-zone-id'
+
+  DomainName:
+    Description: 'Domain name'
+    Value: !Ref DomainName
+    Export:
+      Name: !Sub '${EnvironmentName}-domain'
+
+  ALBCertificateArn:
+    Description: 'ALB SSL Certificate ARN'
+    Value: !Ref ALBCertificate
+    Export:
+      Name: !Sub '${EnvironmentName}-alb-cert-arn'
+
+  Nameservers:
+    Description: 'Route 53 Name Servers'
+    Value: !Join [', ', !GetAtt HostedZone.NameServers]
+    Export:
+      Name: !Sub '${EnvironmentName}-nameservers'

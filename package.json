@@ -1,0 +1,71 @@
+{
+  "name": "roof-platform",
+  "version": "1.0.0",
+  "description": "Enterprise Roofing Contractor Scheduling & Management Platform",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && source venv/bin/activate && python manage.py runserver",
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && source venv/bin/activate && python manage.py collectstatic --noinput",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:frontend": "cd frontend && npm run start",
+    "start:backend": "cd backend && source venv/bin/activate && python manage.py runserver 0.0.0.0:8000",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "cd frontend && npm run test",
+    "test:backend": "cd backend && source venv/bin/activate && python manage.py test",
+    "lint": "npm run lint:frontend",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:fix": "cd frontend && npm run lint -- --fix",
+    "type-check": "cd frontend && npm run type-check",
+    "migrate": "cd backend && source venv/bin/activate && python manage.py migrate",
+    "makemigrations": "cd backend && source venv/bin/activate && python manage.py makemigrations",
+    "createsuperuser": "cd backend && source venv/bin/activate && python manage.py createsuperuser",
+    "shell": "cd backend && source venv/bin/activate && python manage.py shell",
+    "dbshell": "cd backend && source venv/bin/activate && python manage.py dbshell",
+    "collectstatic": "cd backend && source venv/bin/activate && python manage.py collectstatic",
+    "setup": "./setup-env.sh && npm run setup:backend && npm run setup:frontend",
+    "setup:frontend": "cd frontend && npm install",
+    "setup:backend": "cd backend && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt",
+    "clean": "npm run clean:frontend && npm run clean:backend",
+    "clean:frontend": "cd frontend && rm -rf .next node_modules/.cache",
+    "clean:backend": "cd backend && rm -rf __pycache__ */__pycache__ *.pyc */*.pyc",
+    "reset": "npm run clean && npm run setup",
+    "verify-env": "./verify-env.sh",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "prod:build": "npm run build:frontend && npm run build:backend",
+    "prod:start": "docker-compose -f docker-compose.prod.yml up -d"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "keywords": [
+    "roofing",
+    "contractor",
+    "scheduling",
+    "management",
+    "django",
+    "nextjs",
+    "react",
+    "typescript"
+  ],
+  "author": "Roof Platform Team",
+  "license": "MIT"
+}

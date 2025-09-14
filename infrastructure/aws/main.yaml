@@ -1,0 +1,131 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Roofing Platform Main Infrastructure Stack'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: 'roofing-platform'
+    Description: 'Environment name for resource naming'
+
+  DomainName:
+    Type: String
+    Description: 'Domain name for the application'
+
+  DBPassword:
+    Type: String
+    NoEcho: true
+    Description: 'Database master password'
+    MinLength: 8
+
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: 'Name of an existing EC2 KeyPair'
+
+Resources:
+  # VPC Stack
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: './vpc.yaml'
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+
+  # RDS Stack
+  RDSStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: VPCStack
+    Properties:
+      TemplateURL: './rds.yaml'
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        DBPassword: !Ref DBPassword
+        VpcId: !GetAtt VPCStack.Outputs.VPCId
+        PrivateSubnet1Id: !GetAtt VPCStack.Outputs.PrivateSubnet1Id
+        PrivateSubnet2Id: !GetAtt VPCStack.Outputs.PrivateSubnet2Id
+        RDSSecurityGroupId: !GetAtt VPCStack.Outputs.RDSSecurityGroupId
+
+  # EC2 and ALB Stack
+  EC2ALBStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: VPCStack
+    Properties:
+      TemplateURL: './ec2-alb.yaml'
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        KeyName: !Ref KeyName
+        VpcId: !GetAtt VPCStack.Outputs.VPCId
+        PublicSubnet1Id: !GetAtt VPCStack.Outputs.PublicSubnet1Id
+        PublicSubnet2Id: !GetAtt VPCStack.Outputs.PublicSubnet2Id
+        ALBSecurityGroupId: !GetAtt VPCStack.Outputs.ALBSecurityGroupId
+        EC2SecurityGroupId: !GetAtt VPCStack.Outputs.EC2SecurityGroupId
+
+  # S3 and CloudFront Stack
+  S3CloudFrontStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: './s3-cloudfront.yaml'
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        DomainName: !Ref DomainName
+
+  # Route 53 Stack
+  Route53Stack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: [EC2ALBStack, S3CloudFrontStack]
+    Properties:
+      TemplateURL: './route53.yaml'
+      Parameters:
+        EnvironmentName: !Ref EnvironmentName
+        DomainName: !Ref DomainName
+        LoadBalancerDNS: !GetAtt EC2ALBStack.Outputs.LoadBalancerDNSName
+        CloudFrontDomain: !GetAtt S3CloudFrontStack.Outputs.CloudFrontDomain
+
+Outputs:
+  # VPC Outputs
+  VPCId:
+    Description: 'VPC ID'
+    Value: !GetAtt VPCStack.Outputs.VPCId
+
+  # Database Outputs
+  DBEndpoint:
+    Description: 'RDS PostgreSQL endpoint'
+    Value: !GetAtt RDSStack.Outputs.DBEndpoint
+
+  DBDatabaseName:
+    Description: 'Database name'
+    Value: !GetAtt RDSStack.Outputs.DBDatabaseName
+
+  DBUsername:
+    Description: 'Database username'
+    Value: !GetAtt RDSStack.Outputs.DBUsername
+
+  # Load Balancer Outputs
+  LoadBalancerURL:
+    Description: 'Application Load Balancer URL'
+    Value: !GetAtt EC2ALBStack.Outputs.LoadBalancerURL
+
+  LoadBalancerDNS:
+    Description: 'Application Load Balancer DNS'
+    Value: !GetAtt EC2ALBStack.Outputs.LoadBalancerDNSName
+
+  # Storage Outputs
+  StaticAssetsBucket:
+    Description: 'S3 bucket for static assets'
+    Value: !GetAtt S3CloudFrontStack.Outputs.StaticAssetsBucketName
+
+  MediaFilesBucket:
+    Description: 'S3 bucket for media files'
+    Value: !GetAtt S3CloudFrontStack.Outputs.MediaFilesBucketName
+
+  CloudFrontURL:
+    Description: 'CloudFront CDN URL'
+    Value: !GetAtt S3CloudFrontStack.Outputs.CloudFrontURL
+
+  # DNS Outputs
+  HostedZoneId:
+    Description: 'Route 53 Hosted Zone ID'
+    Value: !GetAtt Route53Stack.Outputs.HostedZoneId
+
+  Nameservers:
+    Description: 'Route 53 Name Servers'
+    Value: !GetAtt Route53Stack.Outputs.Nameservers
